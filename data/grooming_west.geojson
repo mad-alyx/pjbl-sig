@@ -1,0 +1,12 @@
+{
+  "type": "FeatureCollection",
+  "name": "grooming_west_CONTOH_DUMMY",
+  "features": [
+    { "type": "Feature", "properties": { "nama": "Contoh Salon A", "jenis": "salon", "tarif": 60000, "layanan": "Potong rambut", "booking": "Online", "kode_usaha": "SA_60000" },
+      "geometry": { "type": "Point", "coordinates": [109.3200, -0.0300] } },
+    { "type": "Feature", "properties": { "nama": "Contoh Barbershop B", "jenis": "barbershop", "tarif": 40000, "layanan": "Cukur", "booking": "Walk-in", "kode_usaha": "BA_40000" },
+      "geometry": { "type": "Point", "coordinates": [109.3250, -0.0320] } },
+    { "type": "Feature", "properties": { "nama": "Contoh Spa C", "jenis": "spa", "tarif": 150000, "layanan": "Pijat", "booking": "Online", "kode_usaha": "SP_150000" },
+      "geometry": { "type": "Point", "coordinates": [109.3180, -0.0280] } }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "pjbl-sig-kelompok8",
+  "version": "1.0.0",
+  "description": "Backend API UAS SIG Dasar Kelompok 8 - Salon, Barbershop & Spa Pontianak Barat",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": { "express": "^4.19.2" }
+}
