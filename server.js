@@ -188,9 +188,9 @@ function simpanZona(req, res) {
     const fiturBaru = {
       type: 'Feature',
       properties: {
-        id: koleksi.features.length + 1,
+        id_zona: koleksi.features.length + 1,
         nama_zona: String(props.nama_zona || 'Zona tanpa nama').slice(0, 100),
-        dibuat: new Date().toISOString()
+        keterangan: String(props.keterangan || '').slice(0, 200)
       },
       geometry: { type: 'Polygon', coordinates: body.geometry.coordinates }
     };
