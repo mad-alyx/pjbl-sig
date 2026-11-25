@@ -1,0 +1,227 @@
+/* Reset CSS */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Pengaturan dasar halaman */
+body {
+    font-family: 'Bricolage Grotesque', 'Figtree', sans-serif;
+    color: #1f2937;
+    background: #f9f5fa;
+}
+
+/* Header aplikasi */
+.app-header {
+    background: #35205b;
+    color: #C9DDF5;
+    padding: 16px 24px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+}
+
+.app-header h1 {
+    font-size: 1.15rem;
+    margin-bottom: 4px;
+}
+
+/* Container utama */
+.app-container {
+    display: flex;
+    height: calc(100vh - 76px);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    padding: 14px;
+    overflow-y: auto;
+    background: #f5f1fc
+    ;
+    border-right: 1px solid #ede2f0;
+}
+
+/* Panel sidebar */
+.panel {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    border: 1px solid #e9e1f3;
+}
+
+.panel h3 {
+    font-size: .85rem;
+    color: #4a2c82;
+    margin-bottom: 8px;
+}
+
+.catatan {
+    font-size: .75rem;
+    color: #64748b;
+    margin-top: 6px;
+}
+
+/* Statistik */
+#stats ul {
+    list-style: none;
+}
+
+#stats li {
+    font-size: .82rem;
+    padding: 4px 0;
+    color: #694747;
+}
+
+/* Toggle */
+.toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    font-size: .82rem;
+    color: #ae65eb;
+    cursor: pointer;
+}
+
+.toggle input,
+.filter-jenis {
+    cursor: pointer;
+}
+
+/* Tombol reset */
+.btn-reset {
+    margin-top: 8px;
+    width: 100%;
+    padding: 6px 10px;
+    font-size: .8rem;
+    color: #4a2c82;
+    background: #f5f1fc;
+    border: 1px solid #d9c8f0;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-reset:hover {
+    background: #ebe0fa;
+}
+
+/* Legenda */
+.legenda {
+    font-size: .8rem;
+    color: #ae65eb;
+}
+
+.legenda div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+}
+
+/* Simbol titik pada legenda */
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-salon {
+    background: #fbc02d;
+}
+
+.dot-barbershop {
+    background: #1565c0;
+}
+
+.dot-spa {
+    background: #ef6c00;
+}
+
+/* Area peta */
+#map {
+    flex: 1;
+    height: 100%;
+}
+
+/* Label nama usaha dengan HALO */
+.label-usaha {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1f2937;
+    white-space: nowrap;
+    text-shadow:
+        -1px -1px 0 #fff,
+         1px -1px 0 #fff,
+        -1px  1px 0 #fff,
+         1px  1px 0 #fff,
+         0 0 3px #fff;
+}
+
+.label-usaha::before {
+    display: none;
+}
+
+/* Popup peta */
+.leaflet-popup-content h4 {
+    color: #35205b;
+    font-size: 13px;
+    margin: 0 0 8px;
+}
+
+.leaflet-popup-content table {
+    font-size: 11px;
+    border-collapse: collapse;
+}
+
+.leaflet-popup-content td {
+    padding: 3px 8px 3px 0;
+    vertical-align: top;
+}
+
+.leaflet-popup-content td:first-child {
+    color: #475569;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Tampilan responsif untuk layar kecil */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        max-height: 40vh;
+    }
+
+    #map {
+        min-height: 60vh;
+    }
+}
+
+/* ========== Ikon cluster (warna jenis dominan dari buatIkonCluster) ========== */
+.cluster-jenis {
+    background: rgba(255, 255, 255, 0.65);
+    border-radius: 50%;
+}
+
+.cluster-jenis div {
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+    text-align: center;
+    line-height: 30px;
+    text-shadow: 0 0 2px rgba(0, 0, 0, .6);
+}
