@@ -174,8 +174,8 @@ Diuji dengan `curl.exe` di Windows pada 25 November 2026, memakai data asli 25 u
 | Pengujian | Hasil |
 |---|---|
 | `GET /api/data/grooming` | 200, 25 fitur |
-| `GET /api/data/zona` dan `/api/data/jalan` (file belum ada) | 200, koleksi kosong |
-| `GET /api/data/ngawur` | 404, pesan menyebut daftar dataset |
+| `GET /api/data/zona` | 200, 3 fitur Polygon (Zona Barat, Zona Tengah, Zona Timur) |
+| `GET /api/data/jalan` (file belum ada) | 200, koleksi kosong || `GET /api/data/ngawur` | 404, pesan menyebut daftar dataset |
 | `GET /api/stats/jenis` | 200, total 25 (salon 15, barbershop 7, spa 3), sesuai hitungan manual |
 | `POST /api/feature/zona_grooming` dengan polygon valid | 201 |
 | `POST` dengan JSON rusak (`{rusak`) | 400, pesan "JSON yang dikirim tidak valid" |

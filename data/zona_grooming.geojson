@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "zona_grooming",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id_zona": 1, "nama_zona": "Zona Barat", "keterangan": "Area konsentrasi usaha grooming bagian barat" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 109.290164376473513, -0.005367101405146 ], [ 109.309365641732882, -0.023451202140328 ], [ 109.29491232570129, -0.030642948764744 ], [ 109.288698098035525, -0.00613515201552 ], [ 109.289885085342476, -0.00557656975343 ], [ 109.290164376473513, -0.005367101405146 ] ] ] } },
+{ "type": "Feature", "properties": { "id_zona": 2, "nama_zona": "Zona Tengah", "keterangan": "Area konsentrasi usaha grooming bagian tengah" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 109.307969186077656, -0.004948164708578 ], [ 109.30755024938108, -0.017446442822854 ], [ 109.310343160691545, -0.022613328747192 ], [ 109.323190552719623, -0.019610949088455 ], [ 109.309225996167356, -0.00452922801201 ], [ 109.307969186077656, -0.004948164708578 ] ] ] } },
+{ "type": "Feature", "properties": { "id_zona": 3, "nama_zona": "Zona Timur", "keterangan": "Area konsentrasi usaha grooming bagian timur" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 109.315021287136545, -0.004878341925816 ], [ 109.314741996005495, -0.010115050632916 ], [ 109.323400021067911, -0.019541126305694 ], [ 109.330591767692326, -0.013885480902027 ], [ 109.32500594507141, -0.010184873415677 ], [ 109.315998806095209, -0.004668873577532 ], [ 109.315021287136545, -0.004878341925816 ] ] ] } }
+]
+}
