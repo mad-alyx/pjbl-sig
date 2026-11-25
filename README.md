@@ -76,8 +76,8 @@ Contoh: `GET http://localhost:3000/api/data/grooming` → `200 OK`
         "alamat": "Jl. Mitra Utama 1, ...",
         "sumber": "Google Maps",
         "status_verifikasi": "Listing ditemukan; tarif dan booking perlu dilengkapi",
-        "link": "https://www.google.com/maps/place/..."
-      },
+        "link": "https://www.google.com/maps/place/...",
+        "kode_usaha": "SA_"      },
       "geometry": { "type": "Point", "coordinates": [109.29900908822368, -0.026006697808488] }
     }
   ]
@@ -175,7 +175,7 @@ Diuji dengan `curl.exe` di Windows pada 25 November 2026, memakai data asli 25 u
 |---|---|
 | `GET /api/data/grooming` | 200, 25 fitur |
 | `GET /api/data/zona` | 200, 3 fitur Polygon (Zona Barat, Zona Tengah, Zona Timur) |
-| `GET /api/data/jalan` (file belum ada) | 200, koleksi kosong || `GET /api/data/ngawur` | 404, pesan menyebut daftar dataset |
+| `GET /api/data/jalan` (file belum ada) | 200, koleksi kosong |
 | `GET /api/stats/jenis` | 200, total 25 (salon 15, barbershop 7, spa 3), sesuai hitungan manual |
 | `POST /api/feature/zona_grooming` dengan polygon valid | 201 |
 | `POST` dengan JSON rusak (`{rusak`) | 400, pesan "JSON yang dikirim tidak valid" |
@@ -189,3 +189,4 @@ Screenshot bukti uji ada di folder `06_Dokumentasi_Bukti_Pengerjaan`.
 
 - Data diganti dengan menimpa file di `data/`; server membaca ulang file di setiap permintaan, jadi tidak perlu restart.
 - Server tidak memakai CORS karena frontend disajikan dari server yang sama (`http://localhost:3000`). Kalau frontend dibuka dari port lain, perlu ditambahkan middleware `cors`.
+- `kode_usaha` dibuat di QGIS dengan rumus `upper(left(jenis,2)) + "_" + tarif`, contoh `SA_450000`. Usaha yang tarifnya kosong hanya berkode awalan (contoh `SA_`).
