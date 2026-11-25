@@ -82,10 +82,13 @@ const map = L.map('map', {
   zoomControl: true
 });
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap contributors',
-  maxZoom: 19
-}).addTo(map);
+L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  {
+    attribution: 'Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics',
+    maxZoom: 19
+  }
+).addTo(map);
 
 // ---------- WADAH LAYER TETAP ----------
 // Setiap layer punya wadah (layerGroup) yang tidak pernah diganti.
