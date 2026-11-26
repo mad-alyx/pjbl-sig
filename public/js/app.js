@@ -22,7 +22,6 @@ const STORAGE_KEY = 'grooming_west_state_v1';
 const DEFAULT_FILTERS = { salon: true, barbershop: true, spa: true };
 
 const state = {
-  showLabels: true,
   cluster: false,
   filters: Object.assign({}, DEFAULT_FILTERS),
   onlineOnly: false         
@@ -37,42 +36,21 @@ function saveState() {
   }
 }
 
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
-    const saved = JSON.parse(raw);
-    if (typeof saved.showLabels === 'boolean') state.showLabels = saved.showLabels;
-    if (typeof saved.cluster === 'boolean') state.cluster = saved.cluster;
-    if (typeof saved.onlineOnly === 'boolean') state.onlineOnly = saved.onlineOnly;
-    if (saved.filters && typeof saved.filters === 'object') {
-      Object.keys(DEFAULT_FILTERS).forEach(k => {
-        if (typeof saved.filters[k] === 'boolean') state.filters[k] = saved.filters[k];
-      });
-    }
-  } catch (e) {
-    console.warn('Gagal memuat state tersimpan:', e);
-  }
-}
-
 // Samakan tampilan checkbox dengan isi state
 function syncControls() {
   document.querySelectorAll('.filter-jenis').forEach(cb => {
     cb.checked = state.filters[cb.value] !== false;
   });
   document.getElementById('filterBooking').checked = state.onlineOnly;
-  document.getElementById('toggleLabels').checked = state.showLabels;
   document.getElementById('toggleCluster').checked = state.cluster;
 }
 
-loadState();
 syncControls();
 
 // ---------- PENYIMPANAN DATA MENTAH ----------
 const rawData = {
   grooming: null,
   zona: null,
-  jalan: null
 };
 
 // ---------- INISIALISASI PETA ----------
@@ -82,13 +60,10 @@ const map = L.map('map', {
   zoomControl: true
 });
 
-L.tileLayer(
-  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-  {
-    attribution: 'Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics',
-    maxZoom: 19
-  }
-).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors',
+  maxZoom: 19
+}).addTo(map);
 
 // ---------- WADAH LAYER TETAP ----------
 // Setiap layer punya wadah (layerGroup) yang tidak pernah diganti.
@@ -96,7 +71,6 @@ L.tileLayer(
 const layerGroups = {
   grooming: L.layerGroup().addTo(map),
   zona: L.layerGroup().addTo(map),
-  jalan: L.layerGroup().addTo(map),
 };
 
 // ---------- HELPER ----------
@@ -219,9 +193,9 @@ function renderGrooming() {
     marker.bindPopup(buildPopupHTML(f));
 
     // Label hanya jika tarif > 50000
-    if (Number(p.tarif) > BATAS_TARIF) {
+    if (Number(p.tarif) > 50000) {
       bindLabel(marker, f);
-    }
+}
 
     marker.__jenis = jenis;  
     container.addLayer(marker);
@@ -233,7 +207,7 @@ function renderGrooming() {
     `Menampilkan ${tampil} dari ${rawData.grooming.features.length} usaha`;
 }
 
-// ---------- RENDER ZONA & JALAN ----------
+// ---------- RENDER ZONA ----------
 function renderZona() {
   layerGroups.zona.clearLayers();
   if (!rawData.zona) return;
@@ -249,21 +223,6 @@ function renderZona() {
   }));
 }
 
-function renderJalan() {
-  layerGroups.jalan.clearLayers();
-  if (!rawData.jalan) return;
-  layerGroups.jalan.addLayer(L.geoJSON(rawData.jalan, {
-    style: (f) => {
-      const kelas = f.properties && f.properties.kelas;
-      if (kelas === 'primary') return { color: '#374151', weight: 5, opacity: 0.8 };
-      return { color: '#6b7280', weight: 3, opacity: 0.7 };
-    },
-    onEachFeature: (f, l) => l.bindPopup(buildPopupHTML(f))
-  }));
-}
-
-
-
 // ---------- MUAT SEMUA DATA ----------
 async function ambil(url) {
   const res = await fetch(url);
@@ -271,7 +230,7 @@ async function ambil(url) {
   return res.json();
 }
 
-// Layer pendukung (zona, jalan) boleh gagal tanpa menjatuhkan seluruh peta
+// Layer pendukung zona boleh gagal tanpa menjatuhkan seluruh peta
 async function ambilOpsional(url) {
   try {
     return await ambil(url);
@@ -283,18 +242,15 @@ async function ambilOpsional(url) {
 
 async function muatSemuaData() {
   try {
-    const [grooming, zona, jalan] = await Promise.all([
+    const [grooming, zona] = await Promise.all([
       ambil('/api/data/grooming', true),
-      ambil('/api/data/zona', true),
-      ambil('/api/data/jalan', true)
+      ambilOpsional('/api/data/zona', true),
     ]);
 
     rawData.grooming = grooming;
     rawData.zona = zona;
-    rawData.jalan = jalan;
 
     // Urutan: bawah ke atas
-    renderJalan();
     renderZona();
     renderGrooming();
 
@@ -302,7 +258,6 @@ async function muatSemuaData() {
     L.control.layers(null, {
       'Usaha Grooming': layerGroups.grooming,
       'Zona Grooming': layerGroups.zona,
-      'Jaringan Jalan': layerGroups.jalan
     }, {
       collapsed: false,
       position: 'topright'
@@ -409,13 +364,6 @@ document.getElementById('filterBooking').addEventListener('change', e => {
   renderGrooming();
 });
 
-// ---------- EVENT: LABEL ----------
-document.getElementById('toggleLabels').addEventListener('change', e => {
-  state.showLabels = e.target.checked;
-  saveState();
-  renderGrooming();
-});
-
 // ---------- EVENT: TOGGLE CLUSTER ----------
 document.getElementById('toggleCluster').addEventListener('change', e => {
   state.cluster = e.target.checked;
@@ -425,7 +373,6 @@ document.getElementById('toggleCluster').addEventListener('change', e => {
 
 // ---------- EVENT: RESET FILTER ----------
 document.getElementById('btnReset').addEventListener('click', () => {
-  state.showLabels = true;
   state.cluster = false;
   state.onlineOnly = false;
   state.filters = Object.assign({}, DEFAULT_FILTERS);
