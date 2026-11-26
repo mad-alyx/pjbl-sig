@@ -51,7 +51,6 @@ syncControls();
 const rawData = {
   grooming: null,
   zona: null,
-  jalan: null
 };
 
 // ---------- INISIALISASI PETA ----------
@@ -75,7 +74,6 @@ L.tileLayer(
 const layerGroups = {
   grooming: L.layerGroup().addTo(map),
   zona: L.layerGroup().addTo(map),
-  jalan: L.layerGroup().addTo(map),
 };
 
 // ---------- HELPER ----------
@@ -212,7 +210,7 @@ function renderGrooming() {
     `Menampilkan ${tampil} dari ${rawData.grooming.features.length} usaha`;
 }
 
-// ---------- RENDER ZONA & JALAN ----------
+// ---------- RENDER ZONA ----------
 function renderZona() {
   layerGroups.zona.clearLayers();
   if (!rawData.zona) return;
@@ -228,21 +226,6 @@ function renderZona() {
   }));
 }
 
-function renderJalan() {
-  layerGroups.jalan.clearLayers();
-  if (!rawData.jalan) return;
-  layerGroups.jalan.addLayer(L.geoJSON(rawData.jalan, {
-    style: (f) => {
-      const kelas = f.properties && f.properties.kelas;
-      if (kelas === 'primary') return { color: '#374151', weight: 5, opacity: 0.8 };
-      return { color: '#6b7280', weight: 3, opacity: 0.7 };
-    },
-    onEachFeature: (f, l) => l.bindPopup(buildPopupHTML(f))
-  }));
-}
-
-
-
 // ---------- MUAT SEMUA DATA ----------
 async function ambil(url) {
   const res = await fetch(url);
@@ -250,7 +233,7 @@ async function ambil(url) {
   return res.json();
 }
 
-// Layer pendukung (zona, jalan) boleh gagal tanpa menjatuhkan seluruh peta
+// Layer pendukung zona boleh gagal tanpa menjatuhkan seluruh peta
 async function ambilOpsional(url) {
   try {
     return await ambil(url);
@@ -262,18 +245,15 @@ async function ambilOpsional(url) {
 
 async function muatSemuaData() {
   try {
-    const [grooming, zona, jalan] = await Promise.all([
+    const [grooming, zona] = await Promise.all([
       ambil('/api/data/grooming', true),
-      ambilopsional('/api/data/zona', true),
-      ambilopsional('/api/data/jalan', true)
+      ambilOpsional('/api/data/zona', true),
     ]);
 
     rawData.grooming = grooming;
     rawData.zona = zona;
-    rawData.jalan = jalan;
 
     // Urutan: bawah ke atas
-    renderJalan();
     renderZona();
     renderGrooming();
 
@@ -281,7 +261,6 @@ async function muatSemuaData() {
     L.control.layers(null, {
       'Usaha Grooming': layerGroups.grooming,
       'Zona Grooming': layerGroups.zona,
-      'Jaringan Jalan': layerGroups.jalan
     }, {
       collapsed: false,
       position: 'topright'
