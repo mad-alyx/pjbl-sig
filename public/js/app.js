@@ -22,7 +22,6 @@ const STORAGE_KEY = 'grooming_west_state_v1';
 const DEFAULT_FILTERS = { salon: true, barbershop: true, spa: true };
 
 const state = {
-  showLabels: true,
   cluster: false,
   filters: Object.assign({}, DEFAULT_FILTERS),
   onlineOnly: false         
@@ -37,35 +36,15 @@ function saveState() {
   }
 }
 
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
-    const saved = JSON.parse(raw);
-    if (typeof saved.showLabels === 'boolean') state.showLabels = saved.showLabels;
-    if (typeof saved.cluster === 'boolean') state.cluster = saved.cluster;
-    if (typeof saved.onlineOnly === 'boolean') state.onlineOnly = saved.onlineOnly;
-    if (saved.filters && typeof saved.filters === 'object') {
-      Object.keys(DEFAULT_FILTERS).forEach(k => {
-        if (typeof saved.filters[k] === 'boolean') state.filters[k] = saved.filters[k];
-      });
-    }
-  } catch (e) {
-    console.warn('Gagal memuat state tersimpan:', e);
-  }
-}
-
 // Samakan tampilan checkbox dengan isi state
 function syncControls() {
   document.querySelectorAll('.filter-jenis').forEach(cb => {
     cb.checked = state.filters[cb.value] !== false;
   });
   document.getElementById('filterBooking').checked = state.onlineOnly;
-  document.getElementById('toggleLabels').checked = state.showLabels;
   document.getElementById('toggleCluster').checked = state.cluster;
 }
 
-loadState();
 syncControls();
 
 // ---------- PENYIMPANAN DATA MENTAH ----------
@@ -219,9 +198,9 @@ function renderGrooming() {
     marker.bindPopup(buildPopupHTML(f));
 
     // Label hanya jika tarif > 50000
-    if (Number(p.tarif) > BATAS_TARIF) {
+    if (Number(p.tarif) > 50000) {
       bindLabel(marker, f);
-    }
+}
 
     marker.__jenis = jenis;  
     container.addLayer(marker);
@@ -285,8 +264,8 @@ async function muatSemuaData() {
   try {
     const [grooming, zona, jalan] = await Promise.all([
       ambil('/api/data/grooming', true),
-      ambil('/api/data/zona', true),
-      ambil('/api/data/jalan', true)
+      ambilopsional('/api/data/zona', true),
+      ambilopsional('/api/data/jalan', true)
     ]);
 
     rawData.grooming = grooming;
@@ -409,13 +388,6 @@ document.getElementById('filterBooking').addEventListener('change', e => {
   renderGrooming();
 });
 
-// ---------- EVENT: LABEL ----------
-document.getElementById('toggleLabels').addEventListener('change', e => {
-  state.showLabels = e.target.checked;
-  saveState();
-  renderGrooming();
-});
-
 // ---------- EVENT: TOGGLE CLUSTER ----------
 document.getElementById('toggleCluster').addEventListener('change', e => {
   state.cluster = e.target.checked;
@@ -425,7 +397,6 @@ document.getElementById('toggleCluster').addEventListener('change', e => {
 
 // ---------- EVENT: RESET FILTER ----------
 document.getElementById('btnReset').addEventListener('click', () => {
-  state.showLabels = true;
   state.cluster = false;
   state.onlineOnly = false;
   state.filters = Object.assign({}, DEFAULT_FILTERS);
